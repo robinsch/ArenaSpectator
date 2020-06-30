@@ -144,6 +144,9 @@ local _CLASS_ICON_TCOORDS = {
 -- Table with all player data
 local players
 
+-- Toggle UI button
+local toggle
+
 -- Current watched target
 local watch
 
@@ -1243,7 +1246,7 @@ local function Reset()
     end
     players = {}
     watch = nil
-    hideui = false
+    hideui = nil
     UIParent:Show()
     CombatLogClearEntries()
     TimeFrame:SetScript("OnUpdate", nil)
@@ -1459,9 +1462,6 @@ end
 
 -- Update spell frame (slot) to show spell (id) for player (target), fades over time (duration)
 local function SetSpell(target, slot, id, duration, interrupted)
-	if id > 60000 then
-		return
-	end
     players[target].spells[slot].id = id
     players[target].spells[slot].tim = duration
     players[target].spells[slot].interrupted = interrupted
@@ -1727,12 +1727,23 @@ end
 local function EventHandler(self, event, ...)
     if (event == "PLAYER_ENTERING_WORLD") then
         Reset()
+        toggle:Hide()
+
+		if not IsActiveBattlefieldArena() then
+		   hideui = nil
+		   UIParent:Show()
+		end
     end
     
-    if(IsActiveBattlefieldArena()) then
+    if IsActiveBattlefieldArena() then
         if (event == "CHAT_MSG_ADDON") then
             if ((arg1 == "ARENASPEC") and (arg3 == "WHISPER") and (arg4 == "")) then
                 ParseCommands(arg2)
+				toggle:Show()
+				if hideui == nil then
+                    hideui = true
+                    UIParent:Hide()
+                end
             end
         elseif (event == "COMBAT_LOG_EVENT_UNFILTERED") then
             if (arg2 == "SPELL_AURA_APPLIED") then
@@ -1780,7 +1791,7 @@ local function init()
     CreateFrame("Frame"):SetScript("OnUpdate", UpdateCastBar)
 
     -- Create show/hide button
-    local toggle = CreateFrame("Button", nil, WorldFrame)
+    toggle = CreateFrame("Button", nil, WorldFrame)
     toggle:SetHeight(20)
     toggle:SetWidth(130)
     toggle:SetPoint("TOP", 0, 0)
