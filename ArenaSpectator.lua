@@ -20,7 +20,25 @@ local ignoreAuras = {
     32724,      -- Gold team      
     32725,      -- Green team
     35774,      -- Gold team
-    35775      -- Green team
+    35775,      -- Green team
+    32727,      -- Arena Preparation
+
+	-- Ascension Auras
+    9930946,    -- Sign of the Duelist
+    1004119,    -- No-Risk
+    1004019,    -- High-Risk
+
+	-- Ascension Misc.
+	5302,       -- Reactive
+    24948,      -- Reactive
+	34084,		-- Reactive
+}
+
+local ignoreSpells = {
+	5302,       -- Reactive
+    45904,		-- Reactive
+	34084,      -- Reactive
+	75,         -- Auto Shot
 }
 
 local dtable = {
@@ -1453,6 +1471,12 @@ end
 
 -- Update current casted spell (id) with cast time (casttime) for player (target)
 local function UpdateSpell(target, id, casttime)
+	for _, value in pairs(ignoreSpells) do
+        if value == id then
+            return
+        end
+    end
+
     local realtime = casttime
     if casttime < 0 then
         realtime = -casttime
@@ -1705,7 +1729,7 @@ local function EventHandler(self, event, ...)
         Reset()
     end
     
-    --if(IsActiveBattlefieldArena()) then
+    if(IsActiveBattlefieldArena()) then
         if (event == "CHAT_MSG_ADDON") then
             if ((arg1 == "ARENASPEC") and (arg3 == "WHISPER") and (arg4 == "")) then
                 ParseCommands(arg2)
@@ -1717,7 +1741,7 @@ local function EventHandler(self, event, ...)
                 UpdateAura(arg7, arg3, arg9, false)
             end
         end
-    --end
+    end
 end
 
 -- Show/Hide button OnClick event
