@@ -1732,11 +1732,6 @@ local function EventHandler(self, event, ...)
     if (event == "PLAYER_ENTERING_WORLD") then
         Reset()
         toggle:Hide()
-
-		if not IsActiveBattlefieldArena() then
-		   hideui = nil
-		   UIParent:Show()
-		end
     end
     
     if IsActiveBattlefieldArena() then
@@ -1749,13 +1744,7 @@ local function EventHandler(self, event, ...)
                     UIParent:Hide()
                 end
             end
-        elseif (event == "COMBAT_LOG_EVENT_UNFILTERED") then
-            if (arg2 == "SPELL_AURA_APPLIED") then
-                UpdateAura(arg7, arg3, arg9, true)
-            elseif (arg2 == "SPELL_AURA_REMOVED") then
-                UpdateAura(arg7, arg3, arg9, false)
-            end
-        end
+		end
     end
 end
 
