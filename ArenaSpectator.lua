@@ -1540,6 +1540,17 @@ local function CancelSpell(target, id)
     end
 end
 
+-- Pushbacks spell (id) by ms (pushback) for player
+local function PushbackSpell(target, id, pushback)
+    if (players[target].spells[0].id == id) then
+        if (players[target].fsmall.cast:GetValue() < select(2, players[target].fsmall.cast:GetMinMaxValues())) then
+            for _, barname in pairs(ALLBARS) do
+                players[target][barname].cast:SetValue(players[target][barname].cast:GetValue() - pushback / 1000)
+            end
+        end
+    end
+end
+
 function SetEndTime(newTime)
     TimeFrame.time = newTime
     TimeFrame:Show()
@@ -1635,6 +1646,9 @@ local function Execute(target, prefix, ...)
         else
             UpdateSpell(target, tonumber(strsub(value, 1, strfind(value, ",") - 1)), casttime)
         end
+	elseif (prefix == "SPB") then
+	   local pushback = tonumber(strsub(value, strfind(value, ",") + 1))
+	   PushbackSpell(target, tonumber(strsub(value, 1, strfind(value, ",") - 1)), pushback)
     elseif (prefix == "CD") then
         AddCooldown(target, tonumber(strsub(value, 1, strfind(value, ",") - 1)), tonumber(strsub(value, strfind(value, ",") + 1)))
     elseif (prefix == "RES") then
