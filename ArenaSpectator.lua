@@ -1559,10 +1559,12 @@ local function CancelSpell(target, id)
     if (players[target].spells[0].id == id) then
         if (players[target].fsmall.cast:GetValue() < select(2, players[target].fsmall.cast:GetMinMaxValues())) then
             for _, barname in pairs(ALLBARS) do
-                players[target][barname].cast:SetMinMaxValues(0, 1)
-                players[target][barname].cast:SetValue(2)
-                players[target][barname].cast:SetAlpha(0)
-                players[target][barname].castbg:SetAlpha(0)
+			    if not players[target].spells[0].interrupted then
+                    players[target][barname].cast:SetMinMaxValues(0, 1)
+                    players[target][barname].cast:SetValue(2)
+                    players[target][barname].cast:SetAlpha(0)
+                    players[target][barname].castbg:SetAlpha(0)
+				end
             end
         end
     end
