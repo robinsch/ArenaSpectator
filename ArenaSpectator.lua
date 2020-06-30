@@ -22,6 +22,9 @@ local ignoreAuras = {
     35774,      -- Gold team
     35775,      -- Green team
     32727,      -- Arena Preparation
+	998034,     -- Frostbrand Weapon 2nd aura
+	853817,	    -- Maelstrom Weapon Mage Aura
+	999119,	    -- Recent Combatant
 
 	-- Ascension Auras
     9930946,    -- Sign of the Duelist
@@ -39,6 +42,7 @@ local ignoreSpells = {
     45904,		-- Reactive
 	34084,      -- Reactive
 	75,         -- Auto Shot
+	74410,      -- Dampening
 }
 
 local dtable = {
